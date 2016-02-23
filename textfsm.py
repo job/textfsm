@@ -14,6 +14,8 @@
 # implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
+from __future__ import print_function
+
 """Template based text parser.
 
 This module implements a parser, intended to be used for converting
@@ -26,6 +28,7 @@ for each input entity.
 """
 
 __version__ = '0.2.2'
+
 
 import getopt
 import inspect
