@@ -683,7 +683,7 @@ class TextFSM(object):
               fsm=self, max_name_len=self.MAX_NAME_LEN,
               options_class=self._options_cls)
           value.Parse(line)
-        except TextFSMTemplateError, error:
+        except TextFSMTemplateError as error:
           raise TextFSMTemplateError('%s Line %s.' % (error, self._line_num))
 
         if value.name in self.header:
@@ -693,7 +693,7 @@ class TextFSM(object):
 
         try:
           self._ValidateOptions(value)
-        except TextFSMTemplateError, error:
+        except TextFSMTemplateError as error:
           raise TextFSMTemplateError('%s Line %s.' % (error, self._line_num))
 
         self.values.append(value)
@@ -992,13 +992,13 @@ def main(argv=None):
 
   try:
     opts, args = getopt.getopt(argv[1:], 'h', ['help'])
-  except getopt.error, msg:
+  except getopt.error as msg:
     raise Usage(msg)
 
   for opt, _ in opts:
     if opt in ('-h', '--help'):
-      print __doc__
-      print help_msg
+      print(__doc__)
+      print(help_msg)
       return 0
 
   if not args or len(args) > 4:
@@ -1008,38 +1008,38 @@ def main(argv=None):
   # Template displayed will match input template, minus any comment lines.
   template = open(args[0], 'r')
   fsm = TextFSM(template)
-  print 'FSM Template:\n%s\n' % fsm
+  print('FSM Template:\n%s\n' % fsm)
 
   if len(args) > 1:
     # Second argument is file with example cli input.
     # Prints parsed tabular result.
     cli_input = open(args[1], 'r').read()
     table = fsm.ParseText(cli_input)
-    print 'FSM Table:'
+    print('FSM Table:')
     result = str(fsm.header) + '\n'
     for line in table:
       result += str(line) + '\n'
-    print result,
+    print(result, end=' ')
 
   if len(args) > 2:
     # Compare tabular result with data in third file argument.
     # Exit value indicates if processed data matched expected result.
     ref_table = open(args[2], 'r').read()
     if ref_table != result:
-      print 'Data mis-match!'
+      print('Data mis-match!')
       return 1
     else:
-      print 'Data match!'
+      print('Data match!')
 
 
 if __name__ == '__main__':
   help_msg = '%s [--help] template [input_file [output_file]]\n' % sys.argv[0]
   try:
     sys.exit(main())
-  except Usage, err:
-    print >>sys.stderr, err
-    print >>sys.stderr, 'For help use --help'
+  except Usage as err:
+    print(err, file=sys.stderr)
+    print('For help use --help', file=sys.stderr)
     sys.exit(2)
-  except (IOError, TextFSMError, TextFSMTemplateError), err:
-    print >>sys.stderr, err
+  except (IOError, TextFSMError, TextFSMTemplateError) as err:
+    print(err, file=sys.stderr)
     sys.exit(2)
